@@ -1,0 +1,34 @@
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+  <title>Yojee</title>
+  <meta charset="utf-8" />
+  <link href="styles.css" rel="stylesheet"/>
+</head>
+<body>
+
+<h2>Yojee (<%= @time %>s)</h2>
+
+<dl id="legend">
+  <dt>Distance (<%= @distances.sum().round(3) %>km)</dt>
+  <% @distances.each do |distance| %>
+      <dd><%=distance.round(3)%></dd>
+  <%end %>
+  <dt>Hops</dt>
+  <% @paths.each do |path| %>
+  <dd><%=path.size%></dd>
+  <%end %>
+</dl>
+<svg id="svgelem" width="<%= WIDTH %>" height="<%= HEIGHT %>" xmlns="http://www.w3.org/2000/svg">
+  <circle class="distributionPoint" cx="<%=(DISTRIBUTION_POINT.longitude-@minx)*@factorx%>" cy="<%=(DISTRIBUTION_POINT.latitude-@miny)*@factory%>"/>
+  <% LOCATIONS.each do |location| %>
+      <circle class="point" cx="<%=(location.longitude-@minx)*@factorx%>" cy="<%=(location.latitude-@miny)*@factory%>"/>
+  <%end %>
+  <% @paths.each do |path| %>
+    <polyline class="path" points="<% path.each do |location| %><%=((location.longitude-@minx)*@factorx)%>,<%=((location.latitude-@miny)*@factory)%> <%end %>"/>
+  <%end %>
+</svg>
+
+</body>
+</html>
